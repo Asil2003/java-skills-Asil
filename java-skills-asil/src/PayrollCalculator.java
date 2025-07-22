@@ -33,7 +33,23 @@ public class PayrollCalculator {
     }
 
     public static double calculateTaxDeduction(double grossPay, boolean hasHealthInsurance) {
-        return 0.0;
+        double tax;
+
+        if (grossPay <= 500) {
+            tax = grossPay * 0.10;
+        } else if (grossPay <= 1000) {
+            tax = grossPay * 0.15;
+        } else if (grossPay <= 2000) {
+            tax = grossPay * 0.20;
+        } else {
+            tax = grossPay * 0.25;
+        }
+
+        if (hasHealthInsurance) {
+            tax -= 50;
+        }
+
+        return Math.max(tax, 0);
     }
 
     public static void processPayroll(String[] employeeTypes, double[] hours, double[] rates, String[] names) {
@@ -47,5 +63,8 @@ public class PayrollCalculator {
 
         System.out.println("Pay for Alice (FULL_TIME, 45h, 25.0): " +
                 calculateWeeklyPay("FULL_TIME", 45, 25.0));
+
+        System.out.println("Tax for $1500 with insurance: " + calculateTaxDeduction(1500, true));
+        System.out.println("Tax for $400 with no insurance: " + calculateTaxDeduction(400, false));
     }
 }
