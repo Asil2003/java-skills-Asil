@@ -53,6 +53,38 @@ public class PayrollCalculator {
     }
 
     public static void processPayroll(String[] employeeTypes, double[] hours, double[] rates, String[] names) {
+        int len = Math.min(Math.min(employeeTypes.length, hours.length), Math.min(rates.length, names.length));
+        double[] grossPays = new double[len];
+        double totalPay = 0;
+        int overtimeCount = 0;
+        int highestIndex = 0;
+        int lowestIndex = 0;
+
+        System.out.println("-----------------------------------------------------------");
+        System.out.printf("%-10s %-12s %-8s %-10s %-10s%n", "Name", "Type", "Hours", "Gross Pay", "Tax");
+        System.out.println("-----------------------------------------------------------");
+
+        for (int i = 0; i < len; i++) {
+            double pay = calculateWeeklyPay(employeeTypes[i], hours[i], rates[i]);
+            double tax = calculateTaxDeduction(pay, true);
+            grossPays[i] = pay;
+            totalPay += pay;
+
+            if (hours[i] > 40) {
+                overtimeCount++;
+            }
+
+            if (pay > grossPays[highestIndex]) highestIndex = i;
+            if (pay < grossPays[lowestIndex]) lowestIndex = i;
+
+            System.out.printf("%-10s %-12s %-8.2f %-10.2f %-10.2f%n", names[i], employeeTypes[i], hours[i], pay, tax);
+        }
+
+        System.out.println("-----------------------------------------------------------");
+        System.out.println("Highest Paid: " + names[highestIndex] + " ($" + grossPays[highestIndex] + ")");
+        System.out.println("Lowest Paid: " + names[lowestIndex] + " ($" + grossPays[lowestIndex] + ")");
+        System.out.printf("Average Pay: %.2f%n", totalPay / len);
+        System.out.println("Employees with Overtime (> 40 hrs): " + overtimeCount);
     }
 
     public static void main(String[] args) {
@@ -61,10 +93,6 @@ public class PayrollCalculator {
         double[] rates = {25.0, 18.0, 40.0, 12.0, 30.0};
         String[] names = {"Alice", "Bob", "Charlie", "Diana", "Eve"};
 
-        System.out.println("Pay for Alice (FULL_TIME, 45h, 25.0): " +
-                calculateWeeklyPay("FULL_TIME", 45, 25.0));
-
-        System.out.println("Tax for $1500 with insurance: " + calculateTaxDeduction(1500, true));
-        System.out.println("Tax for $400 with no insurance: " + calculateTaxDeduction(400, false));
+        processPayroll(types, hours, rates, names);
     }
 }
