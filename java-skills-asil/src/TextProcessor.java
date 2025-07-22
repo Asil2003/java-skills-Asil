@@ -17,7 +17,15 @@ public class TextProcessor {
 
     public static void main(String[] args) {
         String test = "Java is fun and Java is powerful";
-        System.out.println("Word count: " + countWords(test));
-        System.out.println("After replacement: " + replaceWord(test, "Java", "Programming"));
+
+        System.out.println("Original sentence:");
+        System.out.println(test);
+
+        int wordCount = countWords(test);
+        System.out.println("\nWord count: " + wordCount);
+
+        String replaced = replaceWord(test, "Java", "Programming");
+        System.out.println("\nAfter replacing \"Java\" with \"Programming\":");
+        System.out.println(replaced);
     }
 }
