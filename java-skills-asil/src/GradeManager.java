@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class GradeManager {
 
     public static String[] reverseStudentNames(String[] names) {
@@ -24,7 +26,13 @@ public class GradeManager {
     }
 
     public static String[] findFailingStudents(String[] names, int[] scores) {
-        return null;
+        ArrayList<String> failing = new ArrayList<>();
+        for (int i = 0; i < scores.length; i++) {
+            if (scores[i] < 60) {
+                failing.add(names[i]);
+            }
+        }
+        return failing.toArray(new String[0]);
     }
 
     public static void main(String[] args) {
@@ -40,6 +48,12 @@ public class GradeManager {
         System.out.println("\nLetter Grades:");
         for (int i = 0; i < scores.length; i++) {
             System.out.println(students[i] + ": " + getLetterGrade(scores[i]));
+        }
+
+        String[] failing = findFailingStudents(students, scores);
+        System.out.println("\nFailing Students:");
+        for (String name : failing) {
+            System.out.println(name);
         }
     }
 }
