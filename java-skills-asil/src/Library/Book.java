@@ -46,7 +46,7 @@ public class Book {
         return pages;
     }
 
-    public boolean getIsAvailable() {
+    public boolean isAvailable() {
         return isAvailable;
     }
 }
